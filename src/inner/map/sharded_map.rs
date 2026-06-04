@@ -17,10 +17,15 @@ where
 impl<K, V, M, L> ShardedMap<K, V, M, L>
 where
     K: Hash + Eq,
+    V: Clone,
     M: ShardableMap<K, V>,
     L: ShardLock<M>,
 {
     pub fn new(num_shards: usize) -> Self {
+        assert!(
+            num_shards > 0,
+            "number of shards should be greater than zero"
+        );
         let mut shards = Vec::with_capacity(num_shards);
         for _ in 0..num_shards {
             shards.push(L::new(M::new()));
@@ -45,12 +50,11 @@ where
         shard_write_access.insert(key, value);
     }
 
-    pub fn get(&self, key: &K) -> Option<&V> {
+    pub fn get(&self, key: &K) -> Option<V> {
         let shard_index = self.hash(&key);
         let shard = &self.shards[shard_index];
         let shard_read_access: <L as ShardLock<M>>::Guard<'_> = shard.read();
-        let value = shard_read_access.get(key);
-        return value;
+        shard_read_access.get(key).cloned()
     }
     pub fn confirm(&self) {
         println!("Yep")
