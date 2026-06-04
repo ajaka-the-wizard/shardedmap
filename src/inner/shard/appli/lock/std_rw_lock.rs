@@ -17,10 +17,10 @@ impl<T> ShardLock<T> for RwLock<T> {
     }
     #[inline]
     fn read(&self) -> Self::Guard<'_> {
-        self.read().expect("Read lock Poisoned")
+        self.read().unwrap_or_else(|p| p.into_inner())
     }
     #[inline]
     fn write(&self) -> Self::WriteGuard<'_> {
-        self.write().expect("Write lock Poisoned")
+        self.write().unwrap_or_else(|p| p.into_inner())
     }
 }

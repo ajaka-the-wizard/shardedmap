@@ -14,6 +14,7 @@ impl Builder {
     ) -> ShardedMap<K, V, HashMap<K, V>, RwLock<HashMap<K, V>>>
     where
         K: Hash + Eq,
+        V: Clone,
     {
         ShardedMap::<K, V, HashMap<K, V>, RwLock<HashMap<K, V>>>::new(num_shards)
     }
@@ -23,6 +24,7 @@ impl Builder {
     ) -> ShardedMap<K, V, BTreeMap<K, V>, RwLock<BTreeMap<K, V>>>
     where
         K: Hash + Eq + Ord,
+        V: Clone,
     {
         ShardedMap::<K, V, BTreeMap<K, V>, RwLock<BTreeMap<K, V>>>::new(num_shards)
     }
@@ -32,9 +34,9 @@ impl Builder {
     ) -> ShardedMap<K, V, M, RwLock<M>>
     where
         K: Hash + Eq,
-        M: ShardableMap<K,V>,
+        V: Clone,
+        M: ShardableMap<K, V>,
     {
-            ShardedMap::<K, V, M, RwLock<M>>::new(num_shards)
-        
+        ShardedMap::<K, V, M, RwLock<M>>::new(num_shards)
     }
 }
