@@ -11,7 +11,6 @@ ShardedMap distributes data across multiple independent **shards** (partitions),
 - **🔒 Per-shard locking** — Each shard has its own RwLock, enabling concurrent access across shards
 - **🔌 Pluggable architecture** — Swap between different map implementations (HashMap, BTreeMap, or custom)
 - **🎯 Flexible lock mechanisms** — Easily swap the locking primitive (std::sync::RwLock or custom)
-- **📦 Zero-copy reads** — Multiple readers can access different shards simultaneously
 - **⚙️ Generic design** — Works with any `Hash + Eq` key and `Clone` value type
 
 ## Architecture
