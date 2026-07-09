@@ -12,8 +12,8 @@ where
     fn get(&self, key: &K) -> Option<&V> {
         self.get(key)
     }
-    fn insert(&mut self, key: K, value: V) {
-        self.insert(key, value);
+    fn insert(&mut self, key: K, value: V) -> Option<V> {
+        self.insert(key, value)
     }
     fn remove(&mut self, key: &K) -> Option<V> {
         self.remove(key)

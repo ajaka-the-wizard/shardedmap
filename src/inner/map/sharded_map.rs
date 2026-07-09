@@ -56,7 +56,4 @@ where
         let shard_read_access: <L as ShardLock<M>>::Guard<'_> = shard.read();
         shard_read_access.get(key).cloned()
     }
-    pub fn confirm(&self) {
-        println!("Yep")
-    }
 }
