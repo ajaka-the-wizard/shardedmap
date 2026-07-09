@@ -14,6 +14,7 @@ where
 {
     buckets: Vec<Option<Box<Node<K, V>>>>,
     size: usize,
+    length: usize,
 }
 
 impl<K, V> MyCustomMap<K, V>
@@ -25,7 +26,11 @@ where
         for _ in 0..100 {
             buckets.push(None);
         }
-        Self { buckets, size: 100 }
+        Self {
+            buckets,
+            size: 100,
+            length: 0,
+        }
     }
 
     fn hash(&self, key: &K) -> usize {
@@ -54,13 +59,15 @@ where
             value,
             next: None,
         });
-        match &mut self.buckets[index] {
+        let outcome = match &mut self.buckets[index] {
             Some(n) => Self::insert_recursively(n, new_node),
             None => {
                 self.buckets[index] = Some(new_node);
                 None
             }
-        }
+        };
+        self.length += 1;
+        outcome
     }
 
     fn get_recursively<'a>(node: &'a Option<Box<Node<K, V>>>, key: &K) -> Option<&'a V> {
@@ -94,7 +101,7 @@ where
     pub fn remove(&mut self, key: &K) -> Option<V> {
         let index = self.hash(&key);
 
-        if let Some(n) = self.buckets[index].as_mut() {
+        let outcome = if let Some(n) = self.buckets[index].as_mut() {
             if n.key == *key {
                 let mut removed_node = self.buckets[index].take().unwrap();
                 self.buckets[index] = removed_node.next.take();
@@ -104,7 +111,24 @@ where
             }
         } else {
             return None;
+        };
+        if outcome.is_some() {
+            self.length -= 1;
         }
+        outcome
+    }
+    pub fn len(&self) -> usize {
+        self.length
+    }
+    pub fn is_empty(&self) -> bool {
+        self.length == 0
+    }
+    pub fn clear(&mut self) {
+        let mut buckets = Vec::with_capacity(100);
+        for _ in 0..100 {
+            buckets.push(None);
+        }
+        self.buckets = buckets;
     }
 }
 
@@ -123,6 +147,15 @@ where
     }
     fn remove(&mut self, key: &K) -> Option<V> {
         self.remove(key)
+    }
+    fn len(&self) -> usize {
+        self.len()
+    }
+    fn clear(&mut self) {
+        self.clear()
+    }
+    fn is_empty(&self) -> bool {
+        self.is_empty()
     }
 }
 
