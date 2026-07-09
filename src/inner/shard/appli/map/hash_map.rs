@@ -18,4 +18,13 @@ where
     fn remove(&mut self, key: &K) -> Option<V> {
         self.remove(key)
     }
+    fn len(&self) -> usize {
+        self.len()
+    }
+    fn clear(&mut self) {
+        self.clear()
+    }
+    fn is_empty(&self) -> bool {
+        self.is_empty()
+    }
 }
