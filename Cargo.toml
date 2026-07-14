@@ -5,3 +5,17 @@ edition = "2024"
 
 [dependencies]
 xxhash-rust = { version = "0.8.15", features = ["xxh3"] }
+
+[dev-dependencies]
+criterion = {version = "0.5", features = ["html_reports"]}
+dashmap = "6"
+
+[[bench]]
+name="internal"
+path="benches/internal.rs"
+harness=false
+
+[[bench]]
+name="dashmap"
+path="benches/dashmap.rs"
+harness=false
