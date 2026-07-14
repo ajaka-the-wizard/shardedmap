@@ -66,7 +66,9 @@ where
                 None
             }
         };
-        self.length += 1;
+        if outcome.is_none() {
+            self.length += 1;
+        }
         outcome
     }
 
@@ -105,7 +107,7 @@ where
             if n.key == *key {
                 let mut removed_node = self.buckets[index].take().unwrap();
                 self.buckets[index] = removed_node.next.take();
-                return Some(removed_node.value);
+                Some(removed_node.value)
             } else {
                 Self::remove_recursively(n, key)
             }
@@ -129,6 +131,7 @@ where
             buckets.push(None);
         }
         self.buckets = buckets;
+        self.length = 1;
     }
 }
 
@@ -142,8 +145,8 @@ where
     fn get(&self, key: &K) -> Option<&V> {
         self.get(key)
     }
-    fn insert(&mut self, key: K, value: V) {
-        self.insert(key, value);
+    fn insert(&mut self, key: K, value: V) -> Option<V> {
+        self.insert(key, value)
     }
     fn remove(&mut self, key: &K) -> Option<V> {
         self.remove(key)

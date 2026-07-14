@@ -1,1 +1,1 @@
-pub(crate) mod sharded_map;
+pub mod sharded_map;

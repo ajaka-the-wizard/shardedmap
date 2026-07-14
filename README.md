@@ -145,6 +145,15 @@ ShardedMap<K, V, M, L>
 - **M** — Map implementation (must implement `ShardableMap<K, V>`)
 - **L** — Lock type (must implement `ShardLock<M>`)
 
+## Benchmarks
+
+Benchmarked against [DashMap](https://github.com/xacrimon/dashmap) and a naive `Mutex<HashMap>` baseline with Criterion across 1–16 threads:
+
+- **~2.3x higher throughput** than the `Mutex<HashMap>` baseline at 16 threads
+- **~39% behind DashMap** at 16 threads, attributable to generic trait-dispatch overhead
+- Shard count directly confirmed as a tuning tradeoff: over-sharding costs ~22% overhead at low contention, but nearly eliminates lock-serialization penalties under load
+
+Full results, methodology, and how to read the raw reports: [BENCHMARKS.md](./BENCHMARKS.md)
 
 ## License
 
